@@ -5,4 +5,4 @@ ENV DIR /home
 WORKDIR ${DIR}
 COPY . ${DIR}
 
-CMD ["sh","mvnw","spring-boot:run"]
+CMD ["mvn","spring-boot:run"]
