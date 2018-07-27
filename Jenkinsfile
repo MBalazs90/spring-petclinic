@@ -22,5 +22,23 @@ pipeline {
         
       
     }
+	stage('Push Docker image to REG'){
+	 when {
+            expression { env.BRANCH_NAME == 'master' }
+          }
+	steps{
+	 checkout scm
+	  withCredentials([string(credentialsId: 'Docker-hub', variable: 'DockerHubPwd')]) {
+        sh "docker login -u lockdown90 -p ${DockerHubPwd}"
+    }
+	 wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+        sh "docker push lockdown90/spring-petclinic:1.0.${BUILD_NUMBER}"
+		}
+    }
+	
+	}
+	}
+	
+	
 	}
 	}
