@@ -6,24 +6,14 @@ pipeline {
   }
   
   stages {
-    stage('GIT Checkout'){
-	steps{
-	 git 'https://github.com/MBalazs90/spring-petclinic.git'
-	}
-	}
-    stage('Mvn Package') {
-         
-         
+    stage('Mvn Package') {         
           steps {       
           
             wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
                 
                 sh "${mvnCMD} clean package"
             }
-           
-          }
-        
-      
+          }   
     }
 	stage('Build Docker Image'){
 	
