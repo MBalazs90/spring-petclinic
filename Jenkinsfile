@@ -6,13 +6,16 @@ pipeline {
   }
   
   stages {
+    stage('GIT Checkout'){
+	steps{
+	 git 'https://github.com/MBalazs90/spring-petclinic.git'
+	}
+	}
     stage('Mvn Package') {
          
-          when {
-            expression { env.BRANCH_NAME == 'master' }
-                }
+         
           steps {       
-           checkout scm
+          
             wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
                 
                 sh "${mvnCMD} clean package"
@@ -23,22 +26,18 @@ pipeline {
       
     }
 	stage('Build Docker Image'){
-	 when {
-            expression { env.BRANCH_NAME == 'master' }
-          }
+	
 	steps{
-	checkout scm
+	
 	 wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
         sh "docker build -t lockdown90/spring-petclinic:1.0.${BUILD_NUMBER} ."
 		}
     }
 	}
 	stage('Push Docker image to REG'){
-	 when {
-            expression { env.BRANCH_NAME == 'master' }
-          }
+	
 	steps{
-	 checkout scm
+	
 	  withCredentials([string(credentialsId: 'Docker-hub', variable: 'DockerHubPwd')]) {
         sh "docker login -u lockdown90 -p ${DockerHubPwd}"
     }
