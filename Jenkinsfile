@@ -22,6 +22,17 @@ pipeline {
         
       
     }
+	stage('Build Docker Image'){
+	 when {
+            expression { env.BRANCH_NAME == 'master' }
+          }
+	steps{
+	checkout scm
+	 wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
+        sh "docker build -t lockdown90/spring-petclinic:1.0.${BUILD_NUMBER} ."
+		}
+    }
+	}
 	stage('Push Docker image to REG'){
 	 when {
             expression { env.BRANCH_NAME == 'master' }
@@ -37,7 +48,13 @@ pipeline {
     }
 	
 	}
-	}
+	stage('Clean UP'){
+        wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm'])
+		{
+        sh "docker rmi lockdown90/spring-petclinic:1.0.${BUILD_NUMBER}"
+		}
+    }
 	
 	
-	}
+}
+}
