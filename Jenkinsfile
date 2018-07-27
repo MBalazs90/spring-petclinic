@@ -49,12 +49,14 @@ pipeline {
 	
 	}
 	stage('Clean UP'){
+	steps{
         wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm'])
 		{
         sh "docker rmi lockdown90/spring-petclinic:1.0.${BUILD_NUMBER}"
 		}
     }
+	}
 	
 	
-}
-}
+	}
+	}
