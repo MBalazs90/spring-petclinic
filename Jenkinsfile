@@ -8,7 +8,7 @@ pipeline {
           steps {       
            checkout scm
             wrap([$class: 'AnsiColorBuildWrapper', 'colorMapName': 'xterm']) {
-               sh 'Hello World!'
+               sh "echo 'Hello World!'"
             }
            
           }
